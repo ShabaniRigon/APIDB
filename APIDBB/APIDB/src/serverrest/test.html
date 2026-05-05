@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Test APIDB Apiario API</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 2rem auto; line-height: 1.5; }
+        input, button { padding: .5rem; margin: .25rem 0; }
+        label { display: block; margin-top: .5rem; }
+        pre { background: #f3f3f3; padding: 1rem; overflow: auto; }
+    </style>
+</head>
+<body>
+<h1>Test APIDB - Apiario REST API</h1>
+
+<button onclick="listaApiari()">GET /api/apiario</button>
+
+<h2>Inserisci apiario</h2>
+<label>Nome <input id="nome" value="Apiario scuola"></label>
+<label>Luogo <input id="luogo" value="Roma"></label>
+<label>Longitudine <input id="lon" value="12.4964"></label>
+<label>Latitudine <input id="lat" value="41.9028"></label>
+<button onclick="creaApiario()">POST /api/apiario</button>
+
+<h2>Risposta</h2>
+<pre id="output">Premi un pulsante per testare l'API.</pre>
+
+<script>
+const baseUrl = 'http://localhost:8080/api/apiario';
+
+async function listaApiari() {
+    const res = await fetch(baseUrl);
+    mostra(await res.json());
+}
+
+async function creaApiario() {
+    const body = {
+        api_nome: document.getElementById('nome').value,
+        api_luogo: document.getElementById('luogo').value,
+        api_lon: Number(document.getElementById('lon').value),
+        api_lat: Number(document.getElementById('lat').value)
+    };
+    const res = await fetch(baseUrl, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body)
+    });
+    mostra(await res.json());
+}
+
+function mostra(data) {
+    document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+}
+</script>
+</body>
+</html>
